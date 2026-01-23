@@ -1,4 +1,4 @@
-package edu.aitu.oop.clinic;
+package edu.aitu.oop.clinic.Exception;
 
 public class AppointmentNotFoundException extends RuntimeException {
     public AppointmentNotFoundException(String message) {

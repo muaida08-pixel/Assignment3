@@ -1,5 +1,8 @@
-package edu.aitu.oop.clinic;
+package edu.aitu.oop.clinic.Service;
 
+import edu.aitu.oop.clinic.Exception.AppointmentNotFoundException;
+import edu.aitu.oop.clinic.Exception.DoctorUnavailableException;
+import edu.aitu.oop.clinic.Exception.TimeSlotAlreadyBookedException;
 import edu.aitu.oop.clinic.domain.Appointment;
 import edu.aitu.oop.clinic.domain.Doctor;
 import edu.aitu.oop.clinic.domain.Patient;

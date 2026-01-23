@@ -1,4 +1,4 @@
-package edu.aitu.oop.clinic;
+package edu.aitu.oop.clinic.Exception;
 
 public class TimeSlotAlreadyBookedException extends RuntimeException {
     public TimeSlotAlreadyBookedException(String message) {

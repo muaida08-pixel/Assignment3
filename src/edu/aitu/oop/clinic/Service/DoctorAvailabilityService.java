@@ -1,4 +1,4 @@
-package edu.aitu.oop.clinic;
+package edu.aitu.oop.clinic.Service;
 
 import edu.aitu.oop.clinic.domain.Doctor;
 import edu.aitu.oop.clinic.repository.DoctorRepository;
