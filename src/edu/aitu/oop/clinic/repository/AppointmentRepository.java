@@ -1,17 +1,16 @@
 package edu.aitu.oop.clinic.repository;
 
 import edu.aitu.oop.clinic.domain.Appointment;
-
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface AppointmentRepository {
-
+    Appointment findById(int id);
     void save(Appointment appointment);
-
-    Optional<Appointment> findById(Long id);
-
-    List<Appointment> findByDoctorId(Long doctorId);
-
-    List<Appointment> findByPatientId(Long patientId);
+    void update(Appointment appointment);
+    void delete(int id);
+    boolean existsByDoctorAndTime(int doctorId, LocalDateTime time);
+    List<Appointment> findByPatientId(int patientId);
+    List<Appointment> findByDoctorId(int doctorId);
+    int nextId();
 }

@@ -16,4 +16,9 @@ public class InMemoryDoctorRepository implements DoctorRepository {
 
     @Override
     public List<Doctor> findAll() { return new ArrayList<>(doctors); }
+
+    @Override
+    public void save(Doctor doctor) {
+
+    }
 }
