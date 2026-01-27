@@ -26,7 +26,7 @@ public class AppointmentService {
         this.patientRepo = patientRepo;
     }
 
-    public Appointment bookAppointment(int doctorId, int patientId, LocalDateTime time) {
+    public Appointment bookAppointment(Long doctorId, Long patientId, LocalDateTime time) {
         Doctor doctor = doctorRepo.findById(doctorId);
         Patient patient = patientRepo.findById(patientId);
 
@@ -41,13 +41,14 @@ public class AppointmentService {
             throw new TimeSlotAlreadyBookedException("Time slot " + time + " is already booked.");
         }
 
-        int id = appointmentRepo.nextId();
+        Long id = appointmentRepo.nextId();
+
         Appointment appointment = new Appointment(id, doctor, patient, time, "BOOKED");
         appointmentRepo.save(appointment);
         return appointment;
     }
 
-    public void cancelAppointment(int appointmentId) {
+    public void cancelAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepo.findById(appointmentId);
         if (appointment == null) throw new AppointmentNotFoundException("Appointment with id " + appointmentId + " not found.");
 
@@ -61,11 +62,11 @@ public class AppointmentService {
         appointmentRepo.update(cancelled);
     }
 
-    public List<Appointment> getPatientUpcomingAppointments(int patientId) {
+    public List<Appointment> getPatientUpcomingAppointments(Long patientId) {
         return appointmentRepo.findByPatientId(patientId);
     }
 
-    public List<Appointment> getDoctorSchedule(int doctorId) {
+    public List<Appointment> getDoctorSchedule(Long doctorId) {
         return appointmentRepo.findByDoctorId(doctorId);
     }
 }
