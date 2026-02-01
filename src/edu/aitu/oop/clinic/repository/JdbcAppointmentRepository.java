@@ -1,6 +1,6 @@
 package edu.aitu.oop.clinic.repository;
 
-import edu.aitu.oop.clinic.db.DatabaseConnection;
+import edu.aitu.oop.clinic.config.PostgresDB; // <-- Новый импорт
 import edu.aitu.oop.clinic.domain.Appointment;
 import edu.aitu.oop.clinic.domain.Doctor;
 import edu.aitu.oop.clinic.domain.Patient;
@@ -15,7 +15,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     @Override
     public Long nextId() {
         String sql = "SELECT nextval('appointments_id_seq')";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
@@ -30,7 +30,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     @Override
     public void save(Appointment appointment) {
         String sql = "INSERT INTO appointments (id, doctor_id, patient_id, appointment_time, status) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, appointment.getId());
@@ -48,7 +48,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     @Override
     public void update(Appointment appointment) {
         String sql = "UPDATE appointments SET status = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, appointment.getStatus());
@@ -70,7 +70,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
                 "JOIN patients p ON a.patient_id = p.id " +
                 "WHERE a.id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
@@ -96,7 +96,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
                 "JOIN patients p ON a.patient_id = p.id " +
                 "WHERE a.doctor_id = ? ORDER BY a.appointment_time";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, doctorId);
@@ -121,7 +121,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
                 "JOIN patients p ON a.patient_id = p.id " +
                 "WHERE a.patient_id = ? ORDER BY a.appointment_time";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, patientId);
@@ -138,7 +138,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     @Override
     public boolean existsByDoctorAndTime(Long doctorId, LocalDateTime time) {
         String sql = "SELECT count(*) FROM appointments WHERE doctor_id = ? AND appointment_time = ? AND status = 'BOOKED'";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection(); // <-- Singleton
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, doctorId);

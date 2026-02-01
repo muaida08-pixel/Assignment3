@@ -1,6 +1,6 @@
 package edu.aitu.oop.clinic.repository;
 
-import edu.aitu.oop.clinic.db.DatabaseConnection;
+import edu.aitu.oop.clinic.config.PostgresDB;
 import edu.aitu.oop.clinic.domain.Patient;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ public class JdbcPatientRepository implements PatientRepository {
     @Override
     public void save(Patient patient) {
         String sql = "INSERT INTO patients (name, email) VALUES (?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, patient.getName());
@@ -25,7 +25,7 @@ public class JdbcPatientRepository implements PatientRepository {
     @Override
     public Patient findById(Long id) {
         String sql = "SELECT * FROM patients WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = PostgresDB.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
