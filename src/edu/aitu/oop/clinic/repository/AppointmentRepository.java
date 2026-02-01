@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentRepository {
-    Appointment findById(int id);
+    Appointment findById(Long id);
+    List<Appointment> findByDoctorId(Long doctorId);
+    List<Appointment> findByPatientId(Long patientId);
+    List<Appointment> findAll();   // ✅ added
     void save(Appointment appointment);
     void update(Appointment appointment);
-    void delete(int id);
-    boolean existsByDoctorAndTime(int doctorId, LocalDateTime time);
-    List<Appointment> findByPatientId(int patientId);
-    List<Appointment> findByDoctorId(int doctorId);
-    int nextId();
+    boolean existsByDoctorAndTime(Long doctorId, LocalDateTime time);
+    Long nextId();
 }

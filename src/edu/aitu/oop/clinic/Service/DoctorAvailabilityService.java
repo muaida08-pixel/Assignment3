@@ -13,12 +13,12 @@ public class DoctorAvailabilityService {
         this.doctorRepo = doctorRepo;
     }
 
-    public boolean isDoctorAvailable(int doctorId, LocalDateTime time) {
+    public boolean isDoctorAvailable(Long doctorId, LocalDateTime time) {
         Doctor doctor = doctorRepo.findById(doctorId);
         return doctor != null && doctor.isAvailableAt(time);
     }
 
-    public List<LocalDateTime> getDoctorSchedule(int doctorId) {
+    public List<LocalDateTime> getDoctorSchedule(Long doctorId) {
         Doctor doctor = doctorRepo.findById(doctorId);
         return doctor != null ? doctor.getAvailableSlots() : List.of();
     }

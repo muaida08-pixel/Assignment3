@@ -16,7 +16,7 @@ public class PatientService {
         patientRepo.save(patient);
     }
 
-    public Patient getPatientById(int id) {
+    public Patient getPatientById( long id) {
         return patientRepo.findById(id);
     }
 

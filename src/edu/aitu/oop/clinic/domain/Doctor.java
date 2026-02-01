@@ -1,30 +1,33 @@
 package edu.aitu.oop.clinic.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
-    private final int id;
+    private final Long id;
     private final String name;
-    private final List<LocalDateTime> availableSlots;
+    private final String specialization;
 
-    public Doctor(int id, String name, String cardiology, List<LocalDateTime> availableSlots) {
+    public Doctor(Long id, String name, String specialization) {
         this.id = id;
         this.name = name;
-        this.availableSlots = new ArrayList<>(availableSlots);
+        this.specialization = specialization;
     }
 
-    public int getId() { return id; }
+    public Long getId() { return id; }
     public String getName() { return name; }
-    public List<LocalDateTime> getAvailableSlots() { return new ArrayList<>(availableSlots); }
-
-    public boolean isAvailableAt(LocalDateTime time) {
-        return availableSlots.contains(time);
-    }
+    public String getSpecialization() { return specialization; }
 
     @Override
     public String toString() {
-        return "Doctor{id=" + id + ", name='" + name + "'}";
+        return "Doctor{id=" + id + ", name='" + name + "', specialization='" + specialization + "'}";
+    }
+
+    public boolean isAvailableAt(LocalDateTime time) {
+        return false;
+    }
+
+    public List<LocalDateTime> getAvailableSlots() {
+        return List.of();
     }
 }

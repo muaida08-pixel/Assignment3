@@ -16,7 +16,7 @@ public class DoctorService {
         doctorRepo.save(doctor);
     }
 
-    public Doctor getDoctorById(int id) {
+    public Doctor getDoctorById(long id) {
         return doctorRepo.findById(id);
     }
 

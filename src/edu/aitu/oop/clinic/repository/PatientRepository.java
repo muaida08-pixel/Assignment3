@@ -4,8 +4,8 @@ import edu.aitu.oop.clinic.domain.Patient;
 import java.util.List;
 
 public interface PatientRepository {
-    Patient findById(int id);
-    List<Patient> findAll();
+    Patient findById(Long id);
+    List<Patient> findAll();   // ✅ added
 
     void save(Patient patient);
 }
