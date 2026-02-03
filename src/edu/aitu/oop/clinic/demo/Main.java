@@ -3,6 +3,7 @@ package edu.aitu.oop.clinic.demo;
 
 import edu.aitu.oop.clinic.Service.AppointmentService;
 import edu.aitu.oop.clinic.domain.Appointment;
+import edu.aitu.oop.clinic.domain.Doctor;
 
 import edu.aitu.oop.clinic.repository.*;
 
@@ -12,7 +13,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
 
         try {
             DoctorRepository docRepo = new JdbcDoctorRepository();
@@ -32,6 +32,7 @@ public class Main {
                 System.out.println("2. Cancel an Appointment");
                 System.out.println("3. Show Doctor's Schedule");
                 System.out.println("4. Show Patient's Appointments");
+                System.out.println("5. Sort Doctors A-Z");   // ✅ new option
                 System.out.println("0. Exit");
                 System.out.print("Enter choice: ");
 
@@ -44,7 +45,6 @@ public class Main {
                             Long docId = scanner.nextLong();
                             System.out.print("Enter Patient ID: ");
                             Long patId = scanner.nextLong();
-
 
                             LocalDateTime time = LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0);
 
@@ -83,6 +83,17 @@ public class Main {
                             Long pId = scanner.nextLong();
                             List<Appointment> patApps = service.getPatientUpcomingAppointments(pId);
                             patApps.forEach(a -> System.out.println("Dr. " + a.getDoctor().getName() + " at " + a.getTime()));
+                            break;
+
+                        case 5:   // ✅ new case
+                            System.out.println("=== Doctors Sorted A–Z ===");
+                            List<Doctor> sortedDocs = service.sortDoctorsByName();
+                            if (sortedDocs.isEmpty()) {
+                                System.out.println("No doctors found.");
+                            } else {
+                                sortedDocs.forEach(d ->
+                                        System.out.println(d.getId() + " - " + d.getName() + " (" + d.getSpecialization() + ")"));
+                            }
                             break;
 
                         case 0:
