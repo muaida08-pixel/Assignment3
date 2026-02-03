@@ -2,7 +2,5 @@ package edu.aitu.oop.clinic.repository;
 
 import edu.aitu.oop.clinic.domain.Patient;
 
-public interface PatientRepository {
-    void save(Patient patient);
-    Patient findById(Long id);
+public interface PatientRepository extends IRepository<Patient>{
 }
