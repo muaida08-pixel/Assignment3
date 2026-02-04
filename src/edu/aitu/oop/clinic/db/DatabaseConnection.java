@@ -6,14 +6,11 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    // ✅ Full JDBC URL: host + port + database name
     private static final String URL =
             "jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres";
 
-    // ✅ Your Supabase user
     private static final String USER = "postgres.glayopnemfjbdpqexrhh";
 
-    // ✅ Your Supabase password
     private static final String PASSWORD = "mohammad2005forogh";
 
     public static Connection getConnection() throws SQLException {

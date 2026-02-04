@@ -1,4 +1,4 @@
-// ОСТАВЛЯЕМ ЕГО ДЛИННЫЙ ПАКЕТ, ЧТОБЫ INTELLIJ НЕ РУГАЛАСЬ
+
 package edu.aitu.oop.clinic.demo;
 
 import edu.aitu.oop.clinic.Service.AppointmentService;
@@ -32,7 +32,7 @@ public class Main {
                 System.out.println("2. Cancel an Appointment");
                 System.out.println("3. Show Doctor's Schedule");
                 System.out.println("4. Show Patient's Appointments");
-                System.out.println("5. Sort Doctors A-Z");   // ✅ new option
+                System.out.println("5. Sort Doctors A-Z");   // ✅
                 System.out.println("0. Exit");
                 System.out.print("Enter choice: ");
 
@@ -74,7 +74,7 @@ public class Main {
                             if (docApps.isEmpty()) {
                                 System.out.println("No appointments found.");
                             } else {
-                                docApps.forEach(a -> System.out.println("Time: " + a.getTime() + " | Status: " + a.getStatus()));
+                                docApps.forEach(a -> System.out.println("Time: " + a.getTime() + " | Status: " + a.getStatus())); //тут
                             }
                             break;
 
@@ -85,7 +85,7 @@ public class Main {
                             patApps.forEach(a -> System.out.println("Dr. " + a.getDoctor().getName() + " at " + a.getTime()));
                             break;
 
-                        case 5:   // ✅ new case
+                        case 5:
                             System.out.println("=== Doctors Sorted A–Z ===");
                             List<Doctor> sortedDocs = service.sortDoctorsByName();
                             if (sortedDocs.isEmpty()) {

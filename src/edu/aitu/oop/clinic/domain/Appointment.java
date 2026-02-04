@@ -42,6 +42,7 @@ public class Appointment {
         public Builder time(LocalTime time) { this.time = time; return this; }
         public Builder status(String status) { this.status = status; return this; }
 
+
         public Appointment build() {
             if (doctor == null || patient == null || date == null || time == null || status == null) {
                 throw new IllegalStateException("Appointment fields must not be null");
