@@ -4,6 +4,7 @@ package edu.aitu.oop.clinic.demo;
 import edu.aitu.oop.clinic.Service.AppointmentService;
 import edu.aitu.oop.clinic.domain.Appointment;
 import edu.aitu.oop.clinic.domain.Doctor;
+import edu.aitu.oop.clinic.domain.Result;
 
 import edu.aitu.oop.clinic.repository.*;
 
@@ -41,21 +42,22 @@ public class Main {
 
                     switch (choice) {
                         case 1:
-                            System.out.print("Enter Doctor ID: ");
+                            // Пример того, как теперь должен выглядеть вызов в Main.java
+                            System.out.println("Enter Doctor ID, Patient ID and Date-Time (YYYY-MM-DDTHH:MM):");
                             Long docId = scanner.nextLong();
-                            System.out.print("Enter Patient ID: ");
                             Long patId = scanner.nextLong();
+                            LocalDateTime time = LocalDateTime.parse(scanner.next());
 
-                            LocalDateTime time = LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0);
+                            Result<Appointment> result = appointmentService.bookAppointment(docId, patId, time);
 
-                            try {
-                                Appointment newApp = service.bookAppointment(docId, patId, time);
-                                System.out.println("Success! Appointment ID: " + newApp.getId());
-                            } catch (Exception e) {
-                                System.out.println("Booking failed: " + e.getMessage());
+                            if (result.isSuccess()) {
+
+                                Appointment app = result.getData();
+                                System.out.println("Successfully booked! Appointment ID: " + app.getId());
+                            } else {
+
+                                System.out.println("Booking failed: " + result.getMessage());
                             }
-                            break;
-
                         case 2:
                             System.out.print("Enter Appointment ID to cancel: ");
                             Long appId = scanner.nextLong();

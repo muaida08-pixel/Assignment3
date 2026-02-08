@@ -1,11 +1,10 @@
 package edu.aitu.oop.clinic.Service;
 
 import edu.aitu.oop.clinic.Exception.AppointmentNotFoundException;
-import edu.aitu.oop.clinic.Exception.DoctorUnavailableException;
-import edu.aitu.oop.clinic.Exception.TimeSlotAlreadyBookedException;
 import edu.aitu.oop.clinic.domain.Appointment;
 import edu.aitu.oop.clinic.domain.Doctor;
 import edu.aitu.oop.clinic.domain.Patient;
+import edu.aitu.oop.clinic.domain.Result;
 import edu.aitu.oop.clinic.repository.AppointmentRepository;
 import edu.aitu.oop.clinic.repository.DoctorRepository;
 import edu.aitu.oop.clinic.repository.PatientRepository;
@@ -29,36 +28,44 @@ public class AppointmentService {
         this.patientRepo = patientRepo;
     }
 
-    // ===== Booking with Builder Pattern =====
-    public Appointment bookAppointment(Long doctorId, Long patientId, LocalDateTime time) {
-        Doctor doctor = doctorRepo.findById(doctorId);
-        Patient patient = patientRepo.findById(patientId);
+    // ===== Booking with Builder Pattern & Result Wrapper (Milestone 2) =====
+    public Result<Appointment> bookAppointment(Long doctorId, Long patientId, LocalDateTime time) {
+        try {
+            Doctor doctor = doctorRepo.findById(doctorId);
+            Patient patient = patientRepo.findById(patientId);
 
-        if (doctor == null) throw new DoctorUnavailableException("Doctor not found.");
-        if (patient == null) throw new AppointmentNotFoundException("Patient not found.");
+            // Вместо выброса исключений используем Result.failure для стабильности API
+            if (doctor == null) return Result.failure("Doctor not found.");
+            if (patient == null) return Result.failure("Patient not found.");
 
-        if (!doctor.isAvailableAt(time)) {
-            throw new DoctorUnavailableException("Doctor is not available at " + time + ".");
+            // Проверка доступности врача (бизнес-логика) [cite: 49]
+            if (!doctor.isAvailableAt(time)) {
+                return Result.failure("Doctor is not available at " + time);
+            }
+
+            // Проверка на конфликт времени в базе данных [cite: 49]
+            if (appointmentRepo.existsByDoctorAndTime(doctorId, time)) {
+                return Result.failure("Time slot " + time + " is already booked.");
+            }
+
+            Long id = appointmentRepo.nextId();
+
+            // Использование паттерна Builder для создания объекта
+            Appointment appointment = new Appointment.Builder()
+                    .id(id)
+                    .doctor(doctor)
+                    .patient(patient)
+                    .date(time.toLocalDate())
+                    .time(time.toLocalTime())
+                    .status("BOOKED")
+                    .build();
+
+            appointmentRepo.save(appointment);
+            return Result.success(appointment, "Appointment booked successfully!");
+
+        } catch (Exception e) {
+            return Result.failure("System error: " + e.getMessage());
         }
-
-        if (appointmentRepo.existsByDoctorAndTime(doctorId, time)) {
-            throw new TimeSlotAlreadyBookedException("Time slot " + time + " is already booked.");
-        }
-
-        Long id = appointmentRepo.nextId();
-
-        // ✅ Use Builder instead of constructor
-        Appointment appointment = new Appointment.Builder()
-                .id(id.longValue())
-                .doctor(doctor)
-                .patient(patient)
-                .date(time.toLocalDate())
-                .time(time.toLocalTime())
-                .status("BOOKED")
-                .build();
-
-        appointmentRepo.save(appointment);
-        return appointment;
     }
 
     // ===== Cancel Appointment =====
@@ -87,20 +94,18 @@ public class AppointmentService {
         return appointmentRepo.findByDoctorId(doctorId);
     }
 
-    // ===== New Lambdas & Streams =====
-    // Filter today's appointments
+    // ===== New Lambdas & Streams (Java Features) =====
     public List<Appointment> getTodaysAppointments() {
         return appointmentRepo.findAll()
                 .stream()
                 .filter(a -> a.getDate().equals(LocalDate.now()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // Использование Stream API
     }
 
-    // Sort doctors by name
     public List<Doctor> sortDoctorsByName() {
         return doctorRepo.findAll()
                 .stream()
-                .sorted(Comparator.comparing(Doctor::getName))
+                .sorted(Comparator.comparing(Doctor::getName)) // Сортировка через лямбда-выражение
                 .collect(Collectors.toList());
     }
 }
